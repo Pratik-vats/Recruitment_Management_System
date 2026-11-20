@@ -21,6 +21,10 @@ dist-ssr/
 **/.env.*
 !**/.env.example
 *.local
+*credential*
+*credintial*
+*.pem
+*.key
 
 # Scratch, Temporary & Cache Directories
 scratch/

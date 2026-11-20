@@ -8,8 +8,10 @@ const Application = require('../models/Application');
 
 const seedAdmin = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('[Seed] Connected to MongoDB...');
+    if (mongoose.connection.readyState !== 1) {
+      await mongoose.connect(process.env.MONGO_URI);
+      console.log('[Seed] Connected to MongoDB...');
+    }
 
     // Clear existing collections to ensure fresh, consistent realistic Indian data
     await User.deleteMany({});
@@ -235,10 +237,15 @@ const seedAdmin = async () => {
 
     console.log('[Seed] Created realistic candidate applications with resumes and status tracking.');
     console.log('[Seed] Database initialization with real Indian data complete!');
-    process.exit(0);
+    if (require.main === module) {
+      process.exit(0);
+    }
   } catch (error) {
     console.error(`[Seed Error]: ${error.message}`);
-    process.exit(1);
+    if (require.main === module) {
+      process.exit(1);
+    }
+    throw error;
   }
 };
 

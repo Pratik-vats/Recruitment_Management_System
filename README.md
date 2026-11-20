@@ -308,3 +308,42 @@ directly into Postman. It contains pre-configured requests, environment variable
 3. **Resume Protection & Streaming:** Resumes stored on disk and served strictly via authorized endpoint checks with inline PDF headers (`Content-Disposition: inline`).
 4. **Injection Protection:** NoSQL query sanitizer strips `$` and `.` operators from request payloads.
 5. **Rate Limiting:** Protects auth endpoints against brute-force attacks.
+
+---
+
+## 🚀 Production Deployment Guide
+
+TalentSync is fully configured for zero-friction cloud deployment either as an **All-in-One Service** (recommended) or as **Split Services**.
+
+### Option A: All-in-One Deployment (Render, Railway, Heroku)
+
+Deploy the entire full-stack app (React frontend + Express backend) as a single Web Service:
+
+1. **Connect Repository:** Link this GitHub repository on [Render](https://render.com) or [Railway](https://railway.app).
+2. **Configure Service:**
+   - **Environment:** `Node`
+   - **Build Command:** `npm run build`
+   - **Start Command:** `npm start`
+3. **Set Environment Variables:**
+   - `NODE_ENV`: `production`
+   - `PORT`: `10000` (or platform default)
+   - `MONGO_URI`: `mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/recruitment_management?retryWrites=true&w=majority`
+   - `JWT_SECRET`: `<your-random-production-jwt-secret>`
+   - `JWT_EXPIRES_IN`: `1d`
+   - `ADMIN_EMAIL`: `admin@example.com`
+   - `ADMIN_PASSWORD`: `<your-secure-admin-password>`
+4. **Deploy:** The server automatically compiles the client, serves production static files from `client/dist`, connects to MongoDB Atlas, and auto-seeds initial accounts on first startup!
+
+### Option B: Split Deployment (Vercel Frontend + Render Backend)
+
+- **Backend (Render / Railway):**
+  - **Root Directory:** `server`
+  - **Build Command:** `npm install`
+  - **Start Command:** `node server.js`
+  - **Env Var:** Set `CLIENT_URL=https://<your-app>.vercel.app`
+- **Frontend (Vercel / Netlify):**
+  - **Root Directory:** `client`
+  - **Build Command:** `npm run build`
+  - **Output Directory:** `dist`
+  - **Env Var:** Set `VITE_API_URL=https://<your-backend-service>.onrender.com/api`
+
