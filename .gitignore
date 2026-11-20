@@ -1,0 +1,80 @@
+# ==============================================================================
+# TalentSync - Recruitment Management System (RMS)
+# Root .gitignore
+# ==============================================================================
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Production Build Outputs
+dist/
+build/
+dist-ssr/
+**/dist/
+**/build/
+
+# Environment Variables & Secrets
+.env
+.env.*
+**/.env
+**/.env.*
+!**/.env.example
+*.local
+
+# Scratch, Temporary & Cache Directories
+scratch/
+temp/
+tmp/
+.cache/
+**/.vite/
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# User-uploaded dynamic files (ignores timestamped uploads, preserves demo resumes)
+server/uploads/resumes/resume-[0-9]*
+!server/uploads/resumes/.gitkeep
+
+# Logs & Debug Output
+logs/
+**/logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Test & Coverage Outputs
+coverage/
+**/coverage/
+.nyc_output/
+
+# IDE & Text Editor Files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.sublime-project
+*.sublime-workspace
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Package archives
+*.zip
+*.tar.gz
+*.rar
