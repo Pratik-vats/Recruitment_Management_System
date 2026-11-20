@@ -308,5 +308,3 @@ directly into Postman. It contains pre-configured requests, environment variable
 3. **Resume Protection & Streaming:** Resumes stored on disk and served strictly via authorized endpoint checks with inline PDF headers (`Content-Disposition: inline`).
 4. **Injection Protection:** NoSQL query sanitizer strips `$` and `.` operators from request payloads.
 5. **Rate Limiting:** Protects auth endpoints against brute-force attacks.
-#   R e c r u i t m e n t _ M a n a g e m e n t _ S y s t e m  
- 
