@@ -6,8 +6,10 @@
 export const getResumeFileUrl = (filename) => {
   if (!filename) return '';
   const token = localStorage.getItem('token');
-  const base = import.meta.env.VITE_API_URL || '/api';
-  const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
+  let base = (import.meta.env.VITE_API_URL || '/api').trim().replace(/\/$/, '');
+  if (base.startsWith('http') && !base.endsWith('/api')) {
+    base += '/api';
+  }
   const tokenParam = token ? `?token=${encodeURIComponent(token)}` : '';
-  return `${cleanBase}/profile/resume-file/${encodeURIComponent(filename)}${tokenParam}`;
+  return `${base}/profile/resume-file/${encodeURIComponent(filename)}${tokenParam}`;
 };

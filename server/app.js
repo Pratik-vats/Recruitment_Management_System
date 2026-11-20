@@ -27,7 +27,9 @@ app.use(
 
 // Cross-Origin Resource Sharing
 const configuredOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(',').map((u) => u.trim())
+  ? process.env.CLIENT_URL.split(',')
+      .map((u) => u.replace(/^\*/, '').trim().replace(/\/$/, ''))
+      .filter(Boolean)
   : [];
 const defaultOrigins = [
   'http://localhost:5173',
@@ -102,10 +104,10 @@ const authLimiter = rateLimit({
   }
 });
 
-app.use('/api/auth', authLimiter);
+app.use(['/api/auth', '/auth'], authLimiter);
 
-// API Health Check
-app.get('/api/health', (req, res) => {
+// API Health Check & Root Service Status
+app.get(['/api/health', '/health', '/'], (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Recruitment Management System API is healthy',
@@ -113,12 +115,12 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/profile', profileRoutes);
-app.use('/api/jobs', jobRoutes);
-app.use('/api/applications', applicationRoutes);
-app.use('/api/admin', adminRoutes);
+// API Routes (support both /api/* and direct /* prefix for flexible client configurations)
+app.use(['/api/auth', '/auth'], authRoutes);
+app.use(['/api/profile', '/profile'], profileRoutes);
+app.use(['/api/jobs', '/jobs'], jobRoutes);
+app.use(['/api/applications', '/applications'], applicationRoutes);
+app.use(['/api/admin', '/admin'], adminRoutes);
 
 // Production Static Assets: serve client build if available (single-service deployment)
 const clientDistPath = path.join(__dirname, '..', 'client', 'dist');
@@ -127,7 +129,14 @@ if (fs.existsSync(clientDistPath)) {
 
   // SPA client routing fallback (all non-API GET requests serve index.html)
   app.get('*', (req, res, next) => {
-    if (req.originalUrl.startsWith('/api')) {
+    if (
+      req.originalUrl.startsWith('/api') ||
+      req.originalUrl.startsWith('/auth') ||
+      req.originalUrl.startsWith('/profile') ||
+      req.originalUrl.startsWith('/jobs') ||
+      req.originalUrl.startsWith('/applications') ||
+      req.originalUrl.startsWith('/admin')
+    ) {
       return next();
     }
     res.sendFile(path.join(clientDistPath, 'index.html'));

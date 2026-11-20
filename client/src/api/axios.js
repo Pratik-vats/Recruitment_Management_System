@@ -1,7 +1,16 @@
 import axios from 'axios';
 
+// Normalize base URL: ensure clean origin and append '/api' if omitted on full URLs
+const getBaseUrl = () => {
+  let url = (import.meta.env.VITE_API_URL || '/api').trim().replace(/\/$/, '');
+  if (url.startsWith('http') && !url.endsWith('/api')) {
+    url += '/api';
+  }
+  return url;
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: getBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
